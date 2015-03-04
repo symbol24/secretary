@@ -1,33 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-<<<<<<< HEAD
-public class Stomp : MonoBehaviour
-{
-    public Transform m_kickTransform;
-    public Vector3 m_kickTarget;
-    private bool isKicking = false;
-
-    // Use this for initialization
-    private void Start()
-    {
-        m_kickTransform = gameObject.transform;
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        if (Input.GetButtonDown("Fire1") && !isKicking)
-        {
-            Kick();
-        }
-    }
-
-    private void Kick()
-    {
-
-    }
-=======
 public class Stomp : MonoBehaviour {
 	private Transform m_kickTransform;
 	public Transform m_legResetPosition;
@@ -76,5 +49,4 @@ public class Stomp : MonoBehaviour {
 		m_kickTransform.position = m_legResetPosition.position;
 		m_isKicking = false;
 	}
->>>>>>> e33fcc2745d7a5e130bbccf804abfb68eb0be705
 }
