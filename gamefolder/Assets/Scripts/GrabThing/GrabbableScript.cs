@@ -22,7 +22,7 @@ public class GrabbableScript : MonoBehaviour
         if (!IsGrabbed)
         {
             transform.parent = toAttach.transform;
-            rigidbody.isKinematic = true;
+            GetComponent<Rigidbody>().isKinematic = true;
             _coroutineToken = MoveToPosition();
             StartCoroutine(_coroutineToken);
             IsGrabbed = true;
@@ -34,7 +34,7 @@ public class GrabbableScript : MonoBehaviour
         if (IsGrabbed)
         {
             transform.parent = null;
-            rigidbody.isKinematic = false;
+            GetComponent<Rigidbody>().isKinematic = false;
             IsGrabbed = false;
         }
     }
@@ -47,7 +47,7 @@ public class GrabbableScript : MonoBehaviour
             while (transform.position != transform.parent.position && IsGrabbed)
             {
                 var newPosition = Vector3.MoveTowards(transform.position, transform.parent.position, speed*Time.deltaTime);
-                rigidbody.MovePosition(newPosition);
+                GetComponent<Rigidbody>().MovePosition(newPosition);
                 yield return new WaitForEndOfFrame();
             }
 
