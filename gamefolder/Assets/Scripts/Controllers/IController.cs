@@ -5,5 +5,6 @@ public interface IController : IGameObject
 {
     bool GetLeftWingDown();
     bool GetRightWingDown();
-    bool Squeak();
+    bool Screech();
+    bool GrabAction();
 }

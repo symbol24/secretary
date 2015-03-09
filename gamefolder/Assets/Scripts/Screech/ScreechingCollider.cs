@@ -2,10 +2,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class SquakingCollider : MonoBehaviour
+public class ScreechingCollider : MonoBehaviour
 {
 
-    public EventHandler<SqueakableEventArgs> SqueakableFound;
+    public EventHandler<ScreechableEventArgs> SqueakableFound;
 
     void OnTriggerEnter(Collider coll)
     {
@@ -21,7 +21,7 @@ public class SquakingCollider : MonoBehaviour
     {
         if (SqueakableFound != null)
         {
-            SqueakableFound(this, new SqueakableEventArgs() {SqueakableObject = o});
+            SqueakableFound(this, new ScreechableEventArgs() {ScreechableObject = o});
         }
     }
 }

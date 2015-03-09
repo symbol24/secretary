@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SqueakScript : MonoBehaviour
+public class ScreechScript : MonoBehaviour
 {
 
     private IController controller;
     public GameObject sphereColliderToUse;
     private SphereCollider sphereCollider;
-    public AudioSource squeakSound;
+    public AudioSource screechSound;
     public float soundSpeedtotravel = 100f;
     public float timeTraveling = 0.5f;
 
@@ -23,34 +23,36 @@ public class SqueakScript : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (controller.Squeak())
+        if (controller.Screech())
         {
-            if (!_isSqueakingAsync)
+            if (!_isScreechingAsync)
             {
-                StartCoroutine(SqueakAsync());
+                StartCoroutine(ScreechAsync());
             }
         }
     }
 
-    private bool _isSqueakingAsync = false;
+    private bool _isScreechingAsync = false;
 
-    private IEnumerator SqueakAsync()
+    private IEnumerator ScreechAsync()
     {
-        if (!_isSqueakingAsync)
+        if (!_isScreechingAsync)
         {
-            _isSqueakingAsync = true;
-            squeakSound.Play();
-            var currentTime = 0f;
+            _isScreechingAsync = true;
+            if(screechSound != null) screechSound.Play();
+            else Debug.LogWarning("NoScreechSoundAttached");
+            var currentTime = 0f;sphereCollider.enabled = true;
             var originalRadius = sphereCollider.radius;
             while (currentTime < timeTraveling)
             {
                 sphereCollider.radius += soundSpeedtotravel*Time.deltaTime;
                 currentTime += Time.deltaTime;
-                yield return new WaitForEndOfFrame();
+                yield return null;
             }
             sphereCollider.radius = originalRadius;
-
-            _isSqueakingAsync = false;
+            sphereCollider.enabled = false;
+            yield return null;
+            _isScreechingAsync = false;
         }
     }
 

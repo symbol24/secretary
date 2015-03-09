@@ -13,9 +13,14 @@ public class LocalPlayerController : MonoBehaviour, IController
         return Input.GetMouseButtonDown(0);
     }
 
-    public bool Squeak()
+    public bool Screech()
     {
         return Input.GetKeyDown(KeyCode.F);
+    }
+
+    public bool GrabAction()
+    {
+        return Input.GetKeyDown(KeyCode.E);
     }
 
 }

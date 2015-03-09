@@ -4,26 +4,29 @@ using System.Collections;
 public class GrabPlayerScript : MonoBehaviour
 {
 
-    public GrabHandScript grabbingHand;
+    //public GrabHandScript grabbingHand;
+    public GrabArmScript grabbingArm;
+    private IController Controller;
 
     // Use this for initialization
     private void Start()
     {
-
+        if(grabbingArm == null) Debug.LogError("NoGrabbingArm");
+        Controller = GetComponent(typeof (IController)) as IController;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Controller.GrabAction())
         {
-            if (grabbingHand.HasObjectGrabbed)
+            if (grabbingArm.HasObjectGrabbed)
             {
-                grabbingHand.DetachObject();
+                grabbingArm.DetachObject();
             }
             else
             {
-                grabbingHand.AttemptToGrab();
+                grabbingArm.AttemptToGrab();
             }
         }
 
