@@ -4,11 +4,11 @@ using System.Collections;
 public class PlayerStomp : MonoBehaviour {
 	private Transform m_kickTransform;
 	private Vector3 m_legResetPosition;
+	private Quaternion m_legRestRotation;
 	public GameObject m_leftLeg;
 	public GameObject m_rightLeg;
 	public GameObject m_kickTarget;
 	private bool m_isKicking = false;
-	private float m_fireButton = 0.0f;
 	private float m_endKickTime = 0.0f;
 	public float m_kickSpeed = 30.0f;
 	public float m_maxKickTime = 0.1f;
@@ -25,20 +25,23 @@ public class PlayerStomp : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		m_fireButton = Input.GetAxis ("Fire1");
-		if (Input.GetAxis (m_leftKickButton) > 0.0f) {
+		if (Input.GetAxis (m_leftKickButton) > 0.0f && !m_isKicking) {
+			if(!m_leftLeg.activeSelf) m_leftLeg.SetActive(true);
 			m_kickTransform = m_leftLeg.transform;
-			m_legResetPosition = m_kickTransform.position;
 			Kick ();
-		}else if (Input.GetAxis (m_rightKickButton) > 0.0f) {
+		}else if (Input.GetAxis (m_rightKickButton) > 0.0f && !m_isKicking) {
+			if(!m_rightLeg.activeSelf) m_rightLeg.SetActive(true);
 			m_kickTransform = m_rightLeg.transform;
-			m_legResetPosition = m_kickTransform.position;
 			Kick ();
 		}
 	}
 	
 	private void Kick(){
-		if(!m_isKicking) StartCoroutine (KickMotion ());
+		if (!m_isKicking) {
+			m_legResetPosition = m_kickTransform.position;
+			m_legRestRotation = m_kickTransform.localRotation;
+			StartCoroutine (KickMotion ());
+		}
 	}
 	
 	private IEnumerator KickMotion(){
@@ -57,6 +60,13 @@ public class PlayerStomp : MonoBehaviour {
 			yield return new WaitForEndOfFrame();
 		}
 		m_kickTransform.position = m_legResetPosition;
+		m_kickTransform.localRotation = m_legRestRotation;
 		m_isKicking = false;
+		CheckActiveLegs ();
+	}
+
+	private void CheckActiveLegs(){
+		if(m_rightLeg.activeSelf && !m_isKicking) m_rightLeg.SetActive (false);
+		if(m_leftLeg.activeSelf && !m_isKicking) m_leftLeg.SetActive(true);
 	}
 }
