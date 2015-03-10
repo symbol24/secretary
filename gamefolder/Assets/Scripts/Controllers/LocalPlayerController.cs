@@ -23,4 +23,8 @@ public class LocalPlayerController : MonoBehaviour, IController
         return Input.GetKeyDown(KeyCode.E);
     }
 
+    public bool DoGust()
+    {
+        return Input.GetKeyDown(KeyCode.Q);
+    }
 }

@@ -7,4 +7,5 @@ public interface IController : IGameObject
     bool GetRightWingDown();
     bool Screech();
     bool GrabAction();
+    bool DoGust();
 }

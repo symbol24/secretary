@@ -9,7 +9,7 @@ public class ScreechingCollider : MonoBehaviour
 
     void OnTriggerEnter(Collider coll)
     {
-        Debug.Log("needSomechecking");
+        //Debug.Log("needSomechecking");
         if (SqueakableFound != null)
         {
             CallEvent(coll.gameObject);
