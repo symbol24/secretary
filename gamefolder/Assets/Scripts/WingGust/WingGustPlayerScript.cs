@@ -4,9 +4,8 @@ using System.Collections;
 public class WingGustPlayerScript : MonoBehaviour
 {
     private IController controller;
-    public SphereCollider sphereColliderToUse;
-    public float wingMovementTime = 3f;
-    public float radiousSpeed = 10f;
+    public GameObject gustCollider;
+    public float gustStrength;
     // Use this for initialization
     private void Start()
     {
@@ -17,26 +16,14 @@ public class WingGustPlayerScript : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        Debug.DrawRay(transform.position, transform.forward);
         if (controller.DoGust())
         {
-            StartCoroutine(StartGust());
+            var gustcoll =
+                (Instantiate(gustCollider, transform.position, Quaternion.LookRotation(transform.forward)) as GameObject)
+                    .GetComponent<GustCollider>();
+            gustcoll.SourceOfGust = gameObject;
+            gustcoll.ForceToUse = gustStrength;
         }
-    }
-
-    private IEnumerator StartGust()
-    {
-        float currentTime = 0f;
-        sphereColliderToUse.enabled = true;
-        float startRadious = sphereColliderToUse.radius;
-        while (currentTime < wingMovementTime)
-        {
-            currentTime += Time.deltaTime;
-            sphereColliderToUse.radius += radiousSpeed*Time.deltaTime;
-            yield return null;
-        }
-        sphereColliderToUse.enabled = false;
-        sphereColliderToUse.radius = startRadious;
-
-
     }
 }

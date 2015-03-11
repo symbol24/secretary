@@ -24,19 +24,19 @@ public class GrabColliderScript : MonoBehaviour
 
     public bool IsThereAnything { get { return GrabbablesAvailable.Any(c => !c.IsGrabbed); } }
 
-    void OnTriggerEnter(Collider coll)
+    private void OnTriggerEnter(Collider coll)
     {
         var test = coll.gameObject.GetComponent<GrabbableScript>();
         if (test != null)
         {
             Debug.Log("Detected grabbableObject");
-            if (!GrabbablesAvailable.Any(c => c.GetInstanceID() != test.GetInstanceID()))
+            if (!GrabbablesAvailable.Any(c => c.GetInstanceID() == test.GetInstanceID()))
             {
                 GrabbablesAvailable.Add(test);
             }
         }
     }
-    
+
     void OnTriggerExit(Collider coll)
     {
         var test = coll.gameObject.GetComponent<GrabbableScript>();
