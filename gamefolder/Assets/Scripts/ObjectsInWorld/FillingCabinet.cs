@@ -10,8 +10,11 @@ public class FillingCabinet : MonoBehaviour {
 	private Renderer m_myRender;
 	public GameObject[] m_theFolders;
 	public GameObject m_folderSpawnPoint;
-	private int m_folderSpawnAmount = 3;
-	private int m_chanceToSpawnGoodFolder = 10;
+	private int m_folderSpawnAmount = 4;
+	private int m_chanceToSpawnGoodFolder = 2;
+	private float fileThrust = 250.0f;
+	private int folderID = 0;
+	private bool hasGoodSpawned = false;
 
 	private void Start(){
 		m_myState = cabinteState.Healthy;
@@ -20,14 +23,6 @@ public class FillingCabinet : MonoBehaviour {
 	
 	public int GetCabinetHp(){
 		return m_cabinetHp;
-	}
-
-	void OnCollisionEnter(Collision col){
-		print ("Collision! ");
-		Leg colLeg = col.gameObject.GetComponent<Leg> () as Leg;
-		if (colLeg != null) {
-			DealDamage(colLeg.GetDamage());
-		}
 	}
 
 	public void DealDamage(int dmg){
@@ -69,17 +64,26 @@ public class FillingCabinet : MonoBehaviour {
 	}
 
 	private void DropFiles(){
-		print ("Drop a file!");
-
-		int folderID = 0;
-		bool hasGoodSpawned = false;
 		for (int i = 0; i < m_folderSpawnAmount; i++) {
-			if(!hasGoodSpawned){
-
-
+			if(!hasGoodSpawned && m_cabinetHp > 1){
+				int percent =Random.Range(0,10);
+				if(percent >= 10-m_chanceToSpawnGoodFolder){
+					folderID = 1;
+					hasGoodSpawned = true;
+				}
+			}else if(!hasGoodSpawned && m_cabinetHp == 1){
+				folderID = 1;
+				hasGoodSpawned = true;
 			}else folderID = 0;
 
-			Instantiate (m_theFolders [folderID], m_folderSpawnPoint.transform.position, m_folderSpawnPoint.transform.localRotation);
+			GameObject tempFile = Instantiate (m_theFolders [folderID], m_folderSpawnPoint.transform.position, m_folderSpawnPoint.transform.localRotation) as GameObject;
+			Vector3 euler = tempFile.gameObject.transform.eulerAngles;
+			euler.z = Random.Range(-30.0f, 30.0f);
+			tempFile.transform.eulerAngles = euler;
+			Rigidbody fileBody = tempFile.GetComponent<Rigidbody>() as Rigidbody;
+			if(fileBody != null){
+				fileBody.AddForce(Vector3.up * fileThrust);
+			}
 		}
 	}
 }
