@@ -10,7 +10,7 @@ public class FillingCabinet : MonoBehaviour {
 	private Renderer m_myRender;
 	public GameObject[] m_theFolders;
 	public GameObject m_folderSpawnPoint;
-	private int m_folderSpawnAmount = 3;
+	private int m_folderSpawnAmount = 4;
 	private int m_chanceToSpawnGoodFolder = 2;
 	private float fileThrust = 250.0f;
 	private int folderID = 0;
