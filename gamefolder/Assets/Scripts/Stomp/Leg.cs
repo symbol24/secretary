@@ -15,7 +15,6 @@ public class Leg : MonoBehaviour {
 		if (theCabinet != null && Time.time > m_detecttionTimer) {
 			theCabinet.DealDamage(m_kickDamage);
 			m_detecttionTimer = Time.time + m_detectionDelay;
-			print ("Leg Trigger! HP: " + theCabinet.GetCabinetHp());
 		}
 	}
 }
