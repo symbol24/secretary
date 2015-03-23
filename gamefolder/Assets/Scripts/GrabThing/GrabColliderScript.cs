@@ -6,10 +6,24 @@ using System.Collections;
 public class GrabColliderScript : MonoBehaviour
 {
     public List<GrabbableScript> GrabbablesAvailable { get; set; }
+    public List<GameObject> ShowCollider;
+    public bool EnableShowCollider = false;
 
     void Start()
     {
         GrabbablesAvailable = new List<GrabbableScript>();
+    }
+
+    void Update()
+    {
+        if (GrabbablesAvailable.Any())
+        {
+            SetObjectsActive(true);
+        }
+        else
+        {
+            SetObjectsActive(false);
+        }
     }
 
     public GrabbableScript GrabRandomObject(Transform ownerTransform)
@@ -50,4 +64,12 @@ public class GrabColliderScript : MonoBehaviour
         }
     }
 
+    private void SetObjectsActive(bool active)
+    {
+        for (int i = 0; i < ShowCollider.Count; i++)
+        {
+            var o = ShowCollider[i];
+            o.SetActive(active);
+        }
+    }
 }

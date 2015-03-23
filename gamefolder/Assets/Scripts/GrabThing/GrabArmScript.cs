@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GrabArmScript : MonoBehaviour
+public class GrabArmScript : MonoBehaviour, IGrabDecorator
 {
     public GrabHandScript grabbingHand;
 
@@ -37,13 +37,14 @@ public class GrabArmScript : MonoBehaviour
         grabbingHand.DetachObject();
     }
 
-    public void AttemptToGrab()
+    public bool AttemptToGrab()
     {
         if (!_grabbing)
         {
             _grabbing = true;
             StartCoroutine(AttemptToGrabCoroutine());
         }
+        return true;
     }
 
     private bool _grabbing = false;

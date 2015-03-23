@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class GrabHandScript : MonoBehaviour
+public class GrabHandScript : MonoBehaviour, IGrabDecorator
 {
     public GrabColliderScript colliderToGetStuffFrom;
     public Transform transformToKeepObject; //Where the object grab is gonna stay
@@ -28,25 +28,29 @@ public class GrabHandScript : MonoBehaviour
 	
 	}
 
-    public void AttemptToGrab()
+    public bool AttemptToGrab()
     {
         if (colliderToGetStuffFrom.IsThereAnything)
         {
             var grabbingObject = colliderToGetStuffFrom.GrabRandomObject(transform);
             grabbingObject.AttachToGameObject(gameObject);
             objectGrabbed = grabbingObject;
-            //DoSomeAnimation
+            return true;
         }
         else
         {
             Debug.Log("NothingToGrab");
+            return false;
         }
     }
 
 
     public void DetachObject()
     {
-        objectGrabbed.Unattach();
-        objectGrabbed = null;
+        if (HasObjectGrabbed)
+        {
+            objectGrabbed.Unattach();
+            objectGrabbed = null;
+        }
     }
 }

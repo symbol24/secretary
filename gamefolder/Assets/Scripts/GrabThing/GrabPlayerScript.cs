@@ -5,14 +5,16 @@ public class GrabPlayerScript : MonoBehaviour
 {
 
     //public GrabHandScript grabbingHand;
-    public GrabArmScript grabbingArm;
+    public BeakAnimation_Script grabbingArm;
     private IController Controller;
+    private IGrabDecorator grabDecorator;
 
     // Use this for initialization
     private void Start()
     {
         if(grabbingArm == null) Debug.LogError("NoGrabbingArm");
         Controller = GetComponent(typeof (IController)) as IController;
+        grabDecorator = grabbingArm.GetComponent<IGrabDecorator>();
     }
 
     // Update is called once per frame
@@ -20,13 +22,13 @@ public class GrabPlayerScript : MonoBehaviour
     {
         if (Controller.GrabAction())
         {
-            if (grabbingArm.HasObjectGrabbed)
+            if (grabDecorator.HasObjectGrabbed)
             {
-                grabbingArm.DetachObject();
+                grabDecorator.DetachObject();
             }
             else
             {
-                grabbingArm.AttemptToGrab();
+                grabDecorator.AttemptToGrab();
             }
         }
 
