@@ -32,7 +32,7 @@ public class GustCollider : MonoBehaviour
             while (true)
             {
                 Debug.DrawRay(transform.position, transform.forward*4);
-                transform.Translate(transform.forward*gustSpeed*Time.deltaTime);
+                transform.Translate(transform.forward*gustSpeed*Time.deltaTime, Space.World);
                 boxCollider.size = new Vector3(boxCollider.size.x + gustSpeed*Time.deltaTime, boxCollider.size.y,
                     boxCollider.size.z);
                 yield return null;
