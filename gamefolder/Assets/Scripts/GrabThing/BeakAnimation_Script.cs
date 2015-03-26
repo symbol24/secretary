@@ -8,10 +8,13 @@ public class BeakAnimation_Script : MonoBehaviour, IGrabDecorator
     public GameObject BeakToMove;
     public GrabColliderScript CollidertoGoTo;
     public float speed = 400f;
+    public float speedBackwards = 5f;
+    public float distanceCorrection = -0.5f;
+    public float distanceToKeepAfterGrab = 1f;
 
     public void Start()
     {
-        internalGrabbing = grabbingScript.GetComponent<IGrabDecorator>();
+        internalGrabbing = grabbingScript;
     }
 
     public bool HasObjectGrabbed { get { return grabbingScript.HasObjectGrabbed || _isGrabbingInProgress; } }
@@ -39,7 +42,12 @@ public class BeakAnimation_Script : MonoBehaviour, IGrabDecorator
     IEnumerator GrabbingCoroutine()
     {
         _isGrabbingInProgress = true;
-        var positionTogoTo = CollidertoGoTo.gameObject.transform.localPosition.Clone();
+        var distanceBetweenBeakAndCollider = Vector3.Distance(BeakToMove.transform.position,
+            CollidertoGoTo.transform.position) + distanceCorrection;
+        var vectorToTest = CollidertoGoTo.gameObject.transform.position;
+        vectorToTest = BeakToMove.transform.InverseTransformPoint(vectorToTest);
+        var positionTogoTo = vectorToTest.normalized * distanceBetweenBeakAndCollider;
+        
         originalPosition = BeakToMove.transform.localPosition.Clone();
         while (positionTogoTo != BeakToMove.transform.localPosition)
         {
@@ -58,6 +66,16 @@ public class BeakAnimation_Script : MonoBehaviour, IGrabDecorator
         }
         else
         {
+
+            while (Vector3.Distance(BeakToMove.transform.localPosition, originalPosition) >= distanceToKeepAfterGrab)
+            {
+                BeakToMove.transform.localPosition = Vector3.MoveTowards(BeakToMove.transform.localPosition, originalPosition,
+                    speedBackwards * Time.deltaTime);
+                grabbingScript.ObjectGrabbed.transform.localPosition = Vector3.MoveTowards(grabbingScript.ObjectGrabbed.transform.localPosition, originalPosition,
+                    speedBackwards * Time.deltaTime);
+                yield return null;
+            }
+
             _isGrabbingInProgress = false;
         }
         
@@ -73,7 +91,7 @@ public class BeakAnimation_Script : MonoBehaviour, IGrabDecorator
         while (BeakToMove.transform.localPosition != originalPosition)
         {
             BeakToMove.transform.localPosition = Vector3.MoveTowards(BeakToMove.transform.localPosition, originalPosition,
-                speed * Time.deltaTime);
+                speedBackwards * Time.deltaTime);
             yield return null;
         }
         _isDetachingInProgress = false;

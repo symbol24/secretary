@@ -14,7 +14,7 @@ public class GrabPlayerScript : MonoBehaviour
     {
         if(grabbingArm == null) Debug.LogError("NoGrabbingArm");
         Controller = GetComponent(typeof (IController)) as IController;
-        grabDecorator = grabbingArm.GetComponent<IGrabDecorator>();
+        grabDecorator = grabbingArm;
     }
 
     // Update is called once per frame

@@ -8,6 +8,7 @@ public class Gustable : MonoBehaviour
     private List<int> gustCollidersGoneThrough;
     private Rigidbody ownRigidBody;
     public float inmunitySeconds = 4f;
+    public float factorGoingUp = 1f;
     // Use this for initialization
     private void Start()
     {
@@ -27,7 +28,7 @@ public class Gustable : MonoBehaviour
         if (test != null && !gustCollidersGoneThrough.Any(c => c == test.GetInstanceID()))
         {
             var source = transform.position - test.SourceOfGust.transform.position;
-            var vectorToUse = (source + Vector3.up).normalized;
+            var vectorToUse = (source + (Vector3.up * factorGoingUp)).normalized;
             ownRigidBody.AddForce(vectorToUse * test.ForceToUse/source.magnitude, ForceMode.Impulse);
             int instanceID = test.GetInstanceID();
             gustCollidersGoneThrough.Add(instanceID);

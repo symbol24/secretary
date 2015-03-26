@@ -6,9 +6,18 @@ public class GrabHandScript : MonoBehaviour, IGrabDecorator
 {
     public GrabColliderScript colliderToGetStuffFrom;
     public Transform transformToKeepObject; //Where the object grab is gonna stay
-
-    private GrabbableScript objectGrabbed;
-    public bool HasObjectGrabbed { get { return objectGrabbed != null; } }
+    
+    private GrabbableScript _objectGrabbed;
+    public GrabbableScript ObjectGrabbed
+    {
+        get { return _objectGrabbed; }
+        private set
+        {
+            _objectGrabbed = value;
+            colliderToGetStuffFrom.ForceNotShowCollider = _objectGrabbed != null;
+        }
+    }
+    public bool HasObjectGrabbed { get { return ObjectGrabbed != null; } }
 
 	// Use this for initialization
 	void Start ()
@@ -34,7 +43,7 @@ public class GrabHandScript : MonoBehaviour, IGrabDecorator
         {
             var grabbingObject = colliderToGetStuffFrom.GrabRandomObject(transform);
             grabbingObject.AttachToGameObject(gameObject);
-            objectGrabbed = grabbingObject;
+            ObjectGrabbed = grabbingObject;
             return true;
         }
         else
@@ -49,8 +58,8 @@ public class GrabHandScript : MonoBehaviour, IGrabDecorator
     {
         if (HasObjectGrabbed)
         {
-            objectGrabbed.Unattach();
-            objectGrabbed = null;
+            ObjectGrabbed.Unattach();
+            ObjectGrabbed = null;
         }
     }
 }

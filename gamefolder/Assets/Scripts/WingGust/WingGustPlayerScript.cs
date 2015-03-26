@@ -6,6 +6,7 @@ public class WingGustPlayerScript : MonoBehaviour
     private IController controller;
     public GameObject gustCollider;
     public float gustStrength;
+
     // Use this for initialization
     private void Start()
     {

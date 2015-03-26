@@ -7,22 +7,33 @@ public class GrabColliderScript : MonoBehaviour
 {
     public List<GrabbableScript> GrabbablesAvailable { get; set; }
     public List<GameObject> ShowCollider;
-    public bool EnableShowCollider = false;
+    public bool enableShowCollider = false;
+    public float inactiveTimeToDisableGameObjects = 0.05f;
+    public bool ForceNotShowCollider = false;
 
     void Start()
     {
         GrabbablesAvailable = new List<GrabbableScript>();
+        SetObjectsActive(enableShowCollider);
     }
 
     void Update()
     {
-        if (GrabbablesAvailable.Any())
+        
+        if (enableShowCollider)
         {
-            SetObjectsActive(true);
-        }
-        else
-        {
-            SetObjectsActive(false);
+            if (ForceNotShowCollider)
+            {
+                SetObjectsActive(false);
+            }
+            else if (GrabbablesAvailable.Any())
+            {
+                SetObjectsActive(true);
+            }
+            else
+            {
+                SetObjectsActive(false);
+            }
         }
     }
 
@@ -66,10 +77,36 @@ public class GrabColliderScript : MonoBehaviour
 
     private void SetObjectsActive(bool active)
     {
+        if (!_isSetObjectsActiveRunning || active)
+        {
+            if(_isSetObjectsActiveRunning) StopCoroutine(currentSetObjectsActiveRunning);
+            _isSetObjectsActiveRunning = true;
+            currentSetObjectsActiveRunning = SetObjectsActiveCoroutine(active);
+            StartCoroutine(currentSetObjectsActiveRunning);
+        }
+    }
+
+    private bool _isSetObjectsActiveRunning = false;
+    private IEnumerator currentSetObjectsActiveRunning;
+    private IEnumerator SetObjectsActiveCoroutine(bool active)
+    {
+        _isSetObjectsActiveRunning = true;
+        var currentTimer = 0f;
+        if (!active)
+        {
+            while (currentTimer < inactiveTimeToDisableGameObjects)
+            {
+                currentTimer += Time.deltaTime;
+                yield return null;
+            }
+        }
+
         for (int i = 0; i < ShowCollider.Count; i++)
         {
             var o = ShowCollider[i];
             o.SetActive(active);
         }
+
+        _isSetObjectsActiveRunning = false;
     }
 }
