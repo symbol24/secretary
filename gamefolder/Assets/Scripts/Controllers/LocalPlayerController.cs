@@ -27,4 +27,8 @@ public class LocalPlayerController : MonoBehaviour, IController
     {
         return Input.GetKeyDown(KeyCode.Q);
     }
+
+	void Start(){
+		Cursor.visible = false;
+	}
 }

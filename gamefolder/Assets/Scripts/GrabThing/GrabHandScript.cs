@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class GrabHandScript : MonoBehaviour, IGrabDecorator
@@ -23,11 +22,6 @@ public class GrabHandScript : MonoBehaviour, IGrabDecorator
 	void Start ()
 	{
 	    if (colliderToGetStuffFrom == null) colliderToGetStuffFrom = GetComponent<GrabColliderScript>();
-	    if (colliderToGetStuffFrom == null && EditorApplication.isPlaying)
-	    {
-	        Debug.LogError("NoBoxCollider attached");
-            EditorApplication.isPlaying = false;
-	    }
 	    if (transformToKeepObject == null) transformToKeepObject = transform;
 
 	}
