@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class ScreechRunAwayScript : MonoBehaviour
 {
     public float speedToRunAway = 20f;
-    public float factorOfCloseness = 0.5f;
+    public float baseDistanceToRunAway = 0.5f;
     public float randomnessFactor = 4f;
 
     private Rigidbody rigidbody;
@@ -43,8 +43,8 @@ public class ScreechRunAwayScript : MonoBehaviour
             _isRunning = true;
             var directionAway = new Vector3(transform.position.x - sourceOfSound.position.x, 0,
                                     transform.position.z - sourceOfSound.position.z);
-            
-            var timeToRunAway = factorOfCloseness/(directionAway.magnitude);
+
+            var timeToRunAway = baseDistanceToRunAway / (directionAway.magnitude);
             var timeElapsed = 0f;
             yield return null;
             while (timeToRunAway > timeElapsed)

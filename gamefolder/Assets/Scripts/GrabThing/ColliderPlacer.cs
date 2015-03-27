@@ -15,6 +15,7 @@ public class ColliderPlacer : MonoBehaviour
     public float timerToRetreat = 0.1f;
     private float currentTimerToRetreat = 0f;
     private Vector3 initialPosition;
+    public bool enableOrderBy = false;
 
     // Use this for initialization
     private void Start()
@@ -59,12 +60,27 @@ public class ColliderPlacer : MonoBehaviour
     private RaycastHit ChooseObjectProperly(IEnumerable<RaycastHit> rayCastResults)
     {
         RaycastHit ret;
-        if (rayCastResults.Any(c => c.transform.gameObject.GetComponent<GrabbableScript>() != null))
+        if (enableOrderBy)
         {
-            ret = rayCastResults.OrderBy(c => c.distance).First(c => c.transform.gameObject.GetComponent<GrabbableScript>() != null);
+            if (rayCastResults.Any(c => c.transform.gameObject.GetComponent<GrabbableScript>() != null))
+            {
+                ret =
+                    rayCastResults.OrderBy(c => c.distance)
+                        .First(c => c.transform.gameObject.GetComponent<GrabbableScript>() != null);
+            }
+            else ret = rayCastResults.OrderBy(c => c.distance).First();
         }
-        else ret = rayCastResults.OrderBy(c => c.distance).First();
-
+        else
+        {
+            if (rayCastResults.Any(c => c.transform.gameObject.GetComponent<GrabbableScript>() != null))
+            {
+                ret = rayCastResults.First(c => c.transform.gameObject.GetComponent<GrabbableScript>() != null);
+            }
+            else
+            {
+                ret = rayCastResults.First();
+            }
+        }
         return ret;
     }
 }
